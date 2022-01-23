@@ -18,6 +18,7 @@ const List<String> currenciesList = [
   'INR',
   'JPY',
   'MXN',
+  "NGN",
   'NOK',
   'NZD',
   'PLN',
