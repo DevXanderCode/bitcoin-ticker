@@ -13,15 +13,14 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'AUD';
-  late String btcUsd = '?';
+  late String bitcoinValue = '?';
 
   void updateUi() async {
-    CoinData coinData = CoinData(selectedCurrency);
     try {
       var formatter = NumberFormat('#,##,000');
-      double btcPrice = await coinData.getData();
+      double btcPrice = await CoinData().getData(selectedCurrency);
       setState(() {
-        btcUsd = formatter.format(btcPrice.toInt());
+        bitcoinValue = formatter.format(btcPrice.toInt());
       });
     } catch (e) {
       print(e);
@@ -64,8 +63,6 @@ class _PriceScreenState extends State<PriceScreen> {
       itemExtent: 32.0,
       looping: true,
       onSelectedItemChanged: (selectedIndex) {
-        CoinData coinData = CoinData(selectedCurrency);
-        print(selectedIndex);
         setState(() {
           selectedCurrency = currenciesList[selectedIndex];
           updateUi();
@@ -76,7 +73,7 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
   Widget getPickerOrDropdown() =>
-      Platform.isAndroid ? iosPicker() : androidDropDownButton();
+      Platform.isIOS ? iosPicker() : androidDropDownButton();
 
   @override
   void initState() {
@@ -108,7 +105,7 @@ class _PriceScreenState extends State<PriceScreen> {
                   horizontal: 28.0,
                 ),
                 child: Text(
-                  '1 BTC = $btcUsd $selectedCurrency',
+                  '1 BTC = $bitcoinValue $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 20.0,
