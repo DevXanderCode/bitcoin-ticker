@@ -17,11 +17,15 @@ class _PriceScreenState extends State<PriceScreen> {
   CoinData coinData = CoinData('USD');
 
   void updateUi() async {
-    var formatter = NumberFormat('#,##,000');
-    var btcPrice = await getPrice();
-    setState(() {
-      btcUsd = formatter.format(btcPrice.toInt());
-    });
+    try {
+      var formatter = NumberFormat('#,##,000');
+      double btcPrice = await getPrice();
+      setState(() {
+        btcUsd = formatter.format(btcPrice.toInt());
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   DropdownButton androidDropDownButton() {

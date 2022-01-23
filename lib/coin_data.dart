@@ -45,13 +45,12 @@ class CoinData {
     // print(uri);
     http.Response response = await http.get(uri);
 
-    // print(response.body);
-
     if (response.statusCode == 200) {
       String data = response.body;
       return jsonDecode(data)['rate'];
     } else {
-      return response.statusCode;
+      print(response.statusCode);
+      throw 'Problem with the get request';
     }
   }
 }
