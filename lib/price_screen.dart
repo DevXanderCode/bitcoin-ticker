@@ -25,6 +25,16 @@ class _PriceScreenState extends State<PriceScreen> {
     return dropDownList;
   }
 
+  List<Widget> getCupertinoItems() {
+    List<Widget> dropDownList = [];
+    for (String item in currenciesList) {
+      dropDownList.add(
+        Text(item),
+      );
+    }
+    return dropDownList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,15 +71,12 @@ class _PriceScreenState extends State<PriceScreen> {
             padding: const EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
             child: CupertinoPicker(
+              backgroundColor: Colors.lightBlue,
               itemExtent: 32.0,
               onSelectedItemChanged: (selectedIndes) {
                 print(selectedIndes);
               },
-              children: const <Widget>[
-                Text('USD'),
-                Text('EUR'),
-                Text('GBP'),
-              ],
+              children: getCupertinoItems(),
             ),
           )
         ],
