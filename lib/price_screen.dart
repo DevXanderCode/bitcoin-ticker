@@ -12,7 +12,7 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  String selectedCurrency = 'USD';
+  String selectedCurrency = 'AUD';
   late String btcUsd = '?';
 
   void updateUi() async {
@@ -62,15 +62,21 @@ class _PriceScreenState extends State<PriceScreen> {
     return CupertinoPicker(
       backgroundColor: Colors.lightBlue,
       itemExtent: 32.0,
+      looping: true,
       onSelectedItemChanged: (selectedIndex) {
+        CoinData coinData = CoinData(selectedCurrency);
         print(selectedIndex);
+        setState(() {
+          selectedCurrency = currenciesList[selectedIndex];
+          updateUi();
+        });
       },
       children: pickerList,
     );
   }
 
   Widget getPickerOrDropdown() =>
-      Platform.isIOS ? iosPicker() : androidDropDownButton();
+      Platform.isAndroid ? iosPicker() : androidDropDownButton();
 
   @override
   void initState() {
