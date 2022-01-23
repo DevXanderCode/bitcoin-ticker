@@ -25,14 +25,14 @@ class _PriceScreenState extends State<PriceScreen> {
     return dropDownList;
   }
 
-  List<Widget> getCupertinoItems() {
-    List<Widget> dropDownList = [];
+  List<Text> getCupertinoItems() {
+    List<Text> pickerList = [];
     for (String item in currenciesList) {
-      dropDownList.add(
+      pickerList.add(
         Text(item),
       );
     }
-    return dropDownList;
+    return pickerList;
   }
 
   @override
