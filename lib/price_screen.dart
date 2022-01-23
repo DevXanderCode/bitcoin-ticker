@@ -1,8 +1,10 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'coin_data.dart';
 import 'package:intl/intl.dart';
+import 'components/crypto_card.dart';
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({Key? key}) : super(key: key);
@@ -72,6 +74,33 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
+  List<Widget> getPriceUI() {
+    List<Widget> columnChildren = [];
+    List<Widget> cryptoCards = [];
+    late Widget cryptoCardColumn = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: cryptoCards,
+    );
+    for (String coin in cryptoList) {
+      cryptoCards.add(CryptoCard(
+          coin: coin,
+          coinValue: bitcoinValue,
+          selectedCurrency: selectedCurrency));
+    }
+    columnChildren.add(cryptoCardColumn);
+    columnChildren.add(
+      Container(
+        height: 150.0,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.only(bottom: 30.0),
+        color: Colors.lightBlue,
+        child: getPickerOrDropdown(),
+      ),
+    );
+
+    return columnChildren;
+  }
+
   Widget getPickerOrDropdown() =>
       Platform.isIOS ? iosPicker() : androidDropDownButton();
 
@@ -90,39 +119,7 @@ class _PriceScreenState extends State<PriceScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0.0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 28.0,
-                ),
-                child: Text(
-                  '1 BTC = $bitcoinValue $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            height: 150.0,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
-            child: getPickerOrDropdown(),
-          )
-        ],
+        children: getPriceUI(),
       ),
     );
   }
