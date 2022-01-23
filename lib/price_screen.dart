@@ -14,12 +14,12 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
   late String btcUsd = '?';
-  CoinData coinData = CoinData('USD');
 
   void updateUi() async {
+    CoinData coinData = CoinData(selectedCurrency);
     try {
       var formatter = NumberFormat('#,##,000');
-      double btcPrice = await getPrice();
+      double btcPrice = await coinData.getData();
       setState(() {
         btcUsd = formatter.format(btcPrice.toInt());
       });
@@ -45,6 +45,7 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value!;
+          updateUi();
         });
       },
     );
@@ -77,10 +78,6 @@ class _PriceScreenState extends State<PriceScreen> {
     updateUi();
   }
 
-  dynamic getPrice() async {
-    return await coinData.getData();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +102,7 @@ class _PriceScreenState extends State<PriceScreen> {
                   horizontal: 28.0,
                 ),
                 child: Text(
-                  '1 BTC = $btcUsd USD',
+                  '1 BTC = $btcUsd $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 20.0,
