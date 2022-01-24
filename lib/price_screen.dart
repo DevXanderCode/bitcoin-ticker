@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'coin_data.dart';
 import 'package:intl/intl.dart';
 import 'components/crypto_card.dart';
@@ -16,13 +16,16 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'AUD';
   late String bitcoinValue = '?';
+  Map coinDataMap = {};
+  var formatter = NumberFormat('#,###,000');
 
   void updateUi() async {
     try {
-      var formatter = NumberFormat('#,##,000');
-      double btcPrice = await CoinData().getData(selectedCurrency);
+      // var formatter = NumberFormat('#,###,000');
+      Map dataMap = await CoinData().getCoinData(selectedCurrency);
       setState(() {
-        bitcoinValue = formatter.format(btcPrice.toInt());
+        // bitcoinValue = formatter.format(btcPrice.toInt());
+        coinDataMap = dataMap;
       });
     } catch (e) {
       print(e);
@@ -81,12 +84,23 @@ class _PriceScreenState extends State<PriceScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: cryptoCards,
     );
-    for (String coin in cryptoList) {
-      cryptoCards.add(CryptoCard(
-          coin: coin,
-          coinValue: bitcoinValue,
-          selectedCurrency: selectedCurrency));
-    }
+    // for (String coin in cryptoList) {
+    //   cryptoCards.add(
+    //     CryptoCard(
+    //         coin: coin,
+    //         coinValue: bitcoinValue,
+    //         selectedCurrency: selectedCurrency),
+    //   );
+    // }
+
+    coinDataMap.forEach((key, value) {
+      cryptoCards.add(
+        CryptoCard(
+            coin: key,
+            coinValue: formatter.format(value.toInt()),
+            selectedCurrency: selectedCurrency),
+      );
+    });
     columnChildren.add(cryptoCardColumn);
     columnChildren.add(
       Container(
@@ -116,11 +130,22 @@ class _PriceScreenState extends State<PriceScreen> {
       appBar: AppBar(
         title: const Text('🤑 Coin Ticker'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: getPriceUI(),
-      ),
+      body: coinDataMap.isEmpty
+          ? Center(
+              child: SpinKitPouringHourGlassRefined(
+                color: Colors.blue,
+                size: 50.0,
+                // controller: AnimationController(
+                //   vsync: this,
+                //   duration: const Duration(milliseconds: 1200),
+                // ),
+              ),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: getPriceUI(),
+            ),
     );
   }
 }
