@@ -30,11 +30,7 @@ const List<String> currenciesList = [
   'ZAR'
 ];
 
-const List<String> cryptoList = [
-  'BTC',
-  'ETH',
-  'LTC',
-];
+const List<String> cryptoList = ['BTC', 'ETH', 'LTC', 'BNB'];
 Map<String, double> dataMap = {for (String coin in cryptoList) coin: 0.0};
 
 class CoinData {

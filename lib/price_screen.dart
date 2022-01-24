@@ -48,6 +48,7 @@ class _PriceScreenState extends State<PriceScreen> {
       items: dropDownList,
       onChanged: (value) {
         setState(() {
+          coinDataMap = {};
           selectedCurrency = value!;
           updateUi();
         });
@@ -84,14 +85,6 @@ class _PriceScreenState extends State<PriceScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: cryptoCards,
     );
-    // for (String coin in cryptoList) {
-    //   cryptoCards.add(
-    //     CryptoCard(
-    //         coin: coin,
-    //         coinValue: bitcoinValue,
-    //         selectedCurrency: selectedCurrency),
-    //   );
-    // }
 
     coinDataMap.forEach((key, value) {
       cryptoCards.add(
@@ -131,7 +124,7 @@ class _PriceScreenState extends State<PriceScreen> {
         title: const Text('🤑 Coin Ticker'),
       ),
       body: coinDataMap.isEmpty
-          ? Center(
+          ? const Center(
               child: SpinKitPouringHourGlassRefined(
                 color: Colors.blue,
                 size: 50.0,
